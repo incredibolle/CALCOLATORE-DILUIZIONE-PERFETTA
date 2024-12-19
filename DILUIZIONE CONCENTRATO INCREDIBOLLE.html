@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CALCOLATORE DILUIZIONE INCREDIBOLLE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select {
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>CALCOLATORE DILUIZIONE INCREDIBOLLE</h1>
+    <label for="acqua">Quantità di acqua (litri):</label>
+    <input type="number" id="acqua" name="acqua" step="0.1"><br><br>
+    <label for="fattore">Fattore di diluizione:</label>
+    <select id="fattore" name="fattore">
+        <option value="15">1:15</option>
+        <option value="16" selected>1:16</option>
+        <option value="17">1:17</option>
+        <option value="18">1:18</option>
+    </select><br><br>
+    <button onclick="calcolaDiluizione()">Calcola</button>
+    <p id="risultato"></p>
+
+    <script>
+        function calcolaDiluizione() {
+            var acqua = document.getElementById('acqua').value * 1000; // Converti litri in ml
+            var fattore = document.getElementById('fattore').value;
+            var concentrato = (acqua / fattore).toFixed(1);
+            var concentratoGrammi = Math.round(concentrato * 1.091);
+
+            var risultato = 'Quantità di concentrato necessaria: ' + concentrato + ' ml (' + concentratoGrammi + ' grammi)';
+            document.getElementById('risultato').innerText = risultato;
+        }
+    </script>
+</body>
+</html>
