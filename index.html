@@ -2,19 +2,29 @@
 <html>
 <head>
     <title>CALCOLATORE DILUIZIONE INCREDIBOLLE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            padding: 0;
+            box-sizing: border-box;
         }
         h1 {
             color: #333;
+            font-size: 2em;
+            text-align: center;
         }
         label {
             font-weight: bold;
+            display: block;
+            margin-top: 10px;
         }
         input, select {
+            width: 100%;
+            padding: 10px;
             margin-bottom: 10px;
+            box-sizing: border-box;
         }
         button {
             background-color: #4CAF50;
@@ -22,9 +32,17 @@
             border: none;
             padding: 10px 20px;
             cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
         }
         button:hover {
             background-color: #45a049;
+        }
+        @media (min-width: 600px) {
+            body {
+                width: 50%;
+                margin: 20px auto;
+            }
         }
     </style>
 </head>
