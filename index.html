@@ -39,6 +39,11 @@
         .input-box:focus {
             border-color: #4CAF50;
         }
+        .input-box:disabled {
+            background-color: #e0e0e0;
+            border-color: #ccc;
+            cursor: not-allowed;
+        }
         .btn {
             background-color: #4CAF50;
             color: white;
@@ -83,19 +88,19 @@
     <div class="container">
         <div class="section">
             <h3>Indica quanti litri di acqua vuoi utilizzare:</h3>
-            <input id="litri" class="input-box" type="number" step="0.01" placeholder="Litri" required>
+            <input id="litri" class="input-box" type="number" step="0.01" placeholder="Litri" oninput="toggleFields()" required>
         </div>
 
         <div class="or-text">OPPURE</div>
 
         <div class="section">
             <h3>Indica quanto prodotto vuoi utilizzare:</h3>
-            <input id="quantitaProdotto" class="input-box" type="number" step="0.01" placeholder="Quantità" required>
+            <input id="quantitaProdotto" class="input-box" type="number" step="0.01" placeholder="Quantità" oninput="toggleFields()" required>
         </div>
 
         <div class="section">
             <h3>Seleziona l'unità di misura:</h3>
-            <select id="unitaProdotto" class="input-box">
+            <select id="unitaProdotto" class="input-box" onchange="toggleFields()">
                 <option value="grammi">Grammi</option>
                 <option value="ml">Millilitri</option>
             </select>
@@ -141,8 +146,8 @@
                 let grammi = (litri * 1000 / fattore) * pesoSpecifico;
                 let ml = grammi / pesoSpecifico;
 
-                // Arrotondamento
-                grammi = Math.round(grammi * 10) / 10;
+                // Arrotondamento grammi
+                grammi = Math.round(grammi);
                 ml = Math.round(ml * 10) / 10;
 
                 risultato = `Per ${litri} litri di acqua, devi usare ${grammi} grammi di Incredibolle (${ml} ml).`;
@@ -176,6 +181,36 @@
             document.getElementById("unitaProdotto").value = "grammi";
             document.getElementById("fattore").value = "";
             document.getElementById("risultato").innerHTML = "";
+            document.getElementById("litri").disabled = false;
+            document.getElementById("quantitaProdotto").disabled = false;
+            document.getElementById("unitaProdotto").disabled = false;
+        }
+
+        function toggleFields() {
+            let litri = document.getElementById("litri").value;
+            let quantitaProdotto = document.getElementById("quantitaProdotto").value;
+
+            if (litri) {
+                // Disabilita la parte del prodotto e cambia lo stile
+                document.getElementById("quantitaProdotto").disabled = true;
+                document.getElementById("unitaProdotto").disabled = true;
+                document.getElementById("quantitaProdotto").classList.add('input-box-disabled');
+                document.getElementById("unitaProdotto").classList.add('input-box-disabled');
+            } else {
+                document.getElementById("quantitaProdotto").disabled = false;
+                document.getElementById("unitaProdotto").disabled = false;
+                document.getElementById("quantitaProdotto").classList.remove('input-box-disabled');
+                document.getElementById("unitaProdotto").classList.remove('input-box-disabled');
+            }
+
+            if (quantitaProdotto) {
+                // Disabilita la parte dei litri e cambia lo stile
+                document.getElementById("litri").disabled = true;
+                document.getElementById("litri").classList.add('input-box-disabled');
+            } else {
+                document.getElementById("litri").disabled = false;
+                document.getElementById("litri").classList.remove('input-box-disabled');
+            }
         }
     </script>
 </body>
