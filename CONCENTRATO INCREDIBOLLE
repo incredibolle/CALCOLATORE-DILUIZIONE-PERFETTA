@@ -1,0 +1,106 @@
+<!-- Calcolatore 1: Indica quanta acqua vuoi utilizzare -->
+<div class="container">
+    <h3>Indica quanta acqua vuoi utilizzare</h3>
+    <label>Inserisci i litri di acqua:</label>
+    <input type="number" id="waterLiters" placeholder="Litri di acqua">
+    
+    <label>Seleziona fattore di diluizione:</label>
+    <select id="dilutionFactor1">
+        <option value="10">1:10</option>
+        <option value="11">1:11</option>
+        <option value="12">1:12</option>
+        <option value="13">1:13</option>
+        <option value="14" selected>1:14</option>
+        <option value="15">1:15</option>
+        <option value="16">1:16</option>
+        <option value="17">1:17</option>
+        <option value="18">1:18</option>
+    </select>
+    
+    <button onclick="calculateFromWater()">Calcola</button>
+    <p class="result" id="result1"></p>
+</div>
+
+<!-- Calcolatore 2: Indica quanto prodotto vuoi utilizzare -->
+<div class="container">
+    <h3>Indica quanto prodotto vuoi utilizzare</h3>
+    <label>Seleziona tipo di input:</label>
+    <select id="inputType" onchange="updatePlaceholder()">
+        <option value="grams">Grammi</option>
+        <option value="ml">Millilitri</option>
+    </select>
+    
+    <label>Inserisci valore:</label>
+    <input type="number" id="inputValue" placeholder="Inserisci valore" oninput="convertInput()">
+    <p id="convertedValue"></p>
+    
+    <label>Seleziona fattore di diluizione:</label>
+    <select id="dilutionFactor2">
+        <option value="10">1:10</option>
+        <option value="11">1:11</option>
+        <option value="12">1:12</option>
+        <option value="13">1:13</option>
+        <option value="14" selected>1:14</option>
+        <option value="15">1:15</option>
+        <option value="16">1:16</option>
+        <option value="17">1:17</option>
+        <option value="18">1:18</option>
+    </select>
+    
+    <button onclick="calculateFromProduct()">Calcola</button>
+    <p class="result" id="result2"></p>
+</div>
+
+<script>
+    const density = 1.091; // Peso specifico di Incredibolle
+
+    function updatePlaceholder() {
+        const inputType = document.getElementById("inputType").value;
+        document.getElementById("inputValue").placeholder = "Inserisci " + (inputType === "grams" ? "grammi" : "ml");
+        convertInput();
+    }
+
+    function convertInput() {
+        let value = parseFloat(document.getElementById("inputValue").value);
+        if (isNaN(value) || value <= 0) {
+            document.getElementById("convertedValue").innerText = "";
+            return;
+        }
+
+        const inputType = document.getElementById("inputType").value;
+        let convertedValue;
+        if (inputType === "grams") {
+            convertedValue = value / density;
+            document.getElementById("convertedValue").innerText = `Equivalente in ml: ${Math.round(convertedValue)}`;
+        } else {
+            convertedValue = value * density;
+            document.getElementById("convertedValue").innerText = `Equivalente in grammi: ${Math.round(convertedValue)}`;
+        }
+    }
+
+    function calculateFromWater() {
+        let waterLiters = parseFloat(document.getElementById("waterLiters").value);
+        let dilutionFactor = parseInt(document.getElementById("dilutionFactor1").value);
+        if (isNaN(waterLiters) || waterLiters <= 0) {
+            document.getElementById("result1").innerText = "Inserisci un valore valido.";
+            return;
+        }
+        let productNeeded = (waterLiters * 1000) / (dilutionFactor - 1);
+        document.getElementById("result1").innerText = `Utilizzare ${Math.round(productNeeded)} grammi di Incredibolle.`;
+    }
+
+    function calculateFromProduct() {
+        let value = parseFloat(document.getElementById("inputValue").value);
+        if (isNaN(value) || value <= 0) {
+            document.getElementById("result2").innerText = "Inserisci un valore valido.";
+            return;
+        }
+
+        const inputType = document.getElementById("inputType").value;
+        const dilutionFactor = parseInt(document.getElementById("dilutionFactor2").value);
+        let grams = inputType === "grams" ? value : value * density;
+        let waterNeeded = grams * (dilutionFactor - 1);
+        
+        document.getElementById("result2").innerText = `Aggiungere ${Math.round(waterNeeded)} ml di acqua.`;
+    }
+</script>
