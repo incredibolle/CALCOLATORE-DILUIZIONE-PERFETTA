@@ -1,105 +1,151 @@
-<!-- Calcolatore 1: Indica quanta acqua vuoi utilizzare -->
-<div class="container">
-    <h3>Indica quanta acqua vuoi utilizzare</h3>
-    <label>Inserisci i litri di acqua:</label>
-    <input type="number" id="waterLiters" placeholder="Litri di acqua">
-    
-    <label>Seleziona fattore di diluizione:</label>
-    <select id="dilutionFactor1">
-        <option value="10">1:10</option>
-        <option value="11">1:11</option>
-        <option value="12">1:12</option>
-        <option value="13">1:13</option>
-        <option value="14" selected>1:14</option>
-        <option value="15">1:15</option>
-        <option value="16">1:16</option>
-        <option value="17">1:17</option>
-        <option value="18">1:18</option>
-    </select>
-    
-    <button onclick="calculateFromWater()">Calcola</button>
-    <p class="result" id="result1"></p>
-</div>
-
-<!-- Calcolatore 2: Indica quanto prodotto vuoi utilizzare -->
-<div class="container">
-    <h3>Indica quanto prodotto vuoi utilizzare</h3>
-    <label>Seleziona tipo di input:</label>
-    <select id="inputType" onchange="updatePlaceholder()">
-        <option value="grams">Grammi</option>
-        <option value="ml">Millilitri</option>
-    </select>
-    
-    <label>Inserisci valore:</label>
-    <input type="number" id="inputValue" placeholder="Inserisci valore" oninput="convertInput()">
-    <p id="convertedValue"></p>
-    
-    <label>Seleziona fattore di diluizione:</label>
-    <select id="dilutionFactor2">
-        <option value="10">1:10</option>
-        <option value="11">1:11</option>
-        <option value="12">1:12</option>
-        <option value="13">1:13</option>
-        <option value="14" selected>1:14</option>
-        <option value="15">1:15</option>
-        <option value="16">1:16</option>
-        <option value="17">1:17</option>
-        <option value="18">1:18</option>
-    </select>
-    
-    <button onclick="calculateFromProduct()">Calcola</button>
-    <p class="result" id="result2"></p>
-</div>
-
-<script>
-    const density = 1.091; // Peso specifico di Incredibolle
-
-    function updatePlaceholder() {
-        const inputType = document.getElementById("inputType").value;
-        document.getElementById("inputValue").placeholder = "Inserisci " + (inputType === "grams" ? "grammi" : "ml");
-        convertInput();
-    }
-
-    function convertInput() {
-        let value = parseFloat(document.getElementById("inputValue").value);
-        if (isNaN(value) || value <= 0) {
-            document.getElementById("convertedValue").innerText = "";
-            return;
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Diluizione Incredibolle</title>
+    <style>
+        /* Reset della pagina */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        const inputType = document.getElementById("inputType").value;
-        let convertedValue;
-        if (inputType === "grams") {
-            convertedValue = value / density;
-            document.getElementById("convertedValue").innerText = `Equivalente in ml: ${Math.round(convertedValue)}`;
-        } else {
-            convertedValue = value * density;
-            document.getElementById("convertedValue").innerText = `Equivalente in grammi: ${Math.round(convertedValue)}`;
-        }
-    }
-
-    function calculateFromWater() {
-        let waterLiters = parseFloat(document.getElementById("waterLiters").value);
-        let dilutionFactor = parseInt(document.getElementById("dilutionFactor1").value);
-        if (isNaN(waterLiters) || waterLiters <= 0) {
-            document.getElementById("result1").innerText = "Inserisci un valore valido.";
-            return;
-        }
-        let productNeeded = (waterLiters * 1000) / (dilutionFactor - 1);
-        document.getElementById("result1").innerText = `Utilizzare ${Math.round(productNeeded)} grammi di Incredibolle.`;
-    }
-
-    function calculateFromProduct() {
-        let value = parseFloat(document.getElementById("inputValue").value);
-        if (isNaN(value) || value <= 0) {
-            document.getElementById("result2").innerText = "Inserisci un valore valido.";
-            return;
+        /* Layout della pagina */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
         }
 
-        const inputType = document.getElementById("inputType").value;
-        const dilutionFactor = parseInt(document.getElementById("dilutionFactor2").value);
-        let grams = inputType === "grams" ? value : value * density;
-        let waterNeeded = grams * (dilutionFactor - 1);
+        /* Titolo */
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 30px;
+        }
+
+        /* Contenitore principale per i calcolatori */
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        /* Contenitore per il calcolatore a sinistra */
+        .calculator-left, .calculator-right {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 45%;
+            max-width: 400px;
+        }
+
+        /* Styling per il titolo all'interno di ciascun calcolatore */
+        .calculator-left h2, .calculator-right h2 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        /* Formattazione del campo input */
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Bottone per inviare il calcolo */
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Centralizzare la scritta "Oppure" */
+        .or {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Calcolatore Diluizione Incredibolle</h1>
+
+    <!-- Contenitore per i due calcolatori -->
+    <div class="container">
+        
+        <!-- Calcolatore per l'acqua -->
+        <div class="calculator-left">
+            <h2>Indica quanta acqua vuoi utilizzare</h2>
+            <form id="waterCalculator">
+                <input type="number" id="waterAmount" placeholder="Inserisci litri di acqua">
+                <button type="button" onclick="calculateWater()">Calcola</button>
+            </form>
+        </div>
+
+        <!-- Testo per separare i due calcolatori -->
+        <div class="or">
+            <span>Oppure</span>
+        </div>
+
+        <!-- Calcolatore per il prodotto -->
+        <div class="calculator-right">
+            <h2>Indica quanto prodotto vuoi utilizzare</h2>
+            <form id="productCalculator">
+                <input type="number" id="productAmount" placeholder="Inserisci grammi o ml di prodotto">
+                <button type="button" onclick="calculateProduct()">Calcola</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // Funzione per calcolare la quantità di acqua da aggiungere
+        function calculateWater() {
+            let waterAmount = document.getElementById('waterAmount').value;
+            if (waterAmount) {
+                alert("Devi aggiungere " + (waterAmount * 1.14) + " grammi di Incredibolle");
+            } else {
+                alert("Inserisci una quantità di acqua valida.");
+            }
+        }
+
+        // Funzione per calcolare la quantità di prodotto da aggiungere
+        function calculateProduct() {
+            let productAmount = document.getElementById('productAmount').value;
+            if (productAmount) {
+                alert("Devi aggiungere " + (productAmount / 1.14) + " litri di acqua");
+            } else {
+                alert("Inserisci una quantità di prodotto valida.");
+            }
+        }
+    </script>
+
+</body>
+</html>
         
         document.getElementById("result2").innerText = `Aggiungere ${Math.round(waterNeeded)} ml di acqua.`;
     }
