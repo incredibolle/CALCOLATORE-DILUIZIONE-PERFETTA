@@ -165,7 +165,7 @@
                     let esattoLitri = (quantitaProdotto / 1.091 * fattore) / 1000;
                     esattoLitri = Math.round(esattoLitri * 1000) / 1000;
 
-                    risultato = `Per ${quantitaProdotto} grammi di Incredibolle, devi usare circa ${litriCalcolati} litri di acqua, tra parentesi ${esattoLitri} litri.`;
+                    risultato = `Per ${quantitaProdotto} grammi di Incredibolle, devi usare circa ${litriCalcolati} litri di acqua, ovvero ${esattoLitri} litri.`;
                 } else if (unitaProdotto === "ml") {
                     // Calcolo litri da ml
                     let litriCalcolati = (quantitaProdotto / 1000) * fattore;
@@ -176,7 +176,7 @@
                     let esattoLitri = (quantitaProdotto / 1000 * fattore);
                     esattoLitri = Math.round(esattoLitri * 1000) / 1000;
 
-                    risultato = `Per ${quantitaProdotto} ml di Incredibolle, devi usare circa ${litriCalcolati} litri di acqua, tra parentesi ${esattoLitri} litri.`;
+                    risultato = `Per ${quantitaProdotto} ml di Incredibolle, devi usare circa ${litriCalcolati} litri di acqua, ovvero ${esattoLitri} litri.`;
                 }
             } else {
                 risultato = "Inserisci un valore valido!";
