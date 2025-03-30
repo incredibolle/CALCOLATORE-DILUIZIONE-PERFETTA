@@ -158,8 +158,7 @@
                     risultato = `Per ${quantitaProdotto} grammi di Incredibolle, devi usare circa ${litriCalcolati} litri di acqua.`;
                 } else if (unitaProdotto === "ml") {
                     // Calcolo litri da ml
-                    let grammiCalcolati = quantitaProdotto * pesoSpecifico;
-                    let litriCalcolati = grammiCalcolati / (1.091 * fattore);
+                    let litriCalcolati = (quantitaProdotto / 1000) * fattore;
                     // Arrotondamento
                     litriCalcolati = Math.round(litriCalcolati * 10) / 10;
                     risultato = `Per ${quantitaProdotto} ml di Incredibolle, devi usare circa ${litriCalcolati} litri di acqua.`;
