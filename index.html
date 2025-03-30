@@ -98,20 +98,19 @@
         <div class="section">
             <h3>Seleziona il fattore di diluizione (1:10 a 1:18):</h3>
             <select id="fattore" class="input-box">
-                <option value="1.10">1:10</option>
-                <option value="1.11">1:11</option>
-                <option value="1.12">1:12</option>
-                <option value="1.13">1:13</option>
-                <option value="1.14">1:14</option>
-                <option value="1.15">1:15</option>
-                <option value="1.16">1:16</option>
-                <option value="1.17">1:17</option>
-                <option value="1.18">1:18</option>
+                <option value="16">1:16</option>
+                <option value="15">1:15</option>
+                <option value="14">1:14</option>
+                <option value="13">1:13</option>
+                <option value="12">1:12</option>
+                <option value="11">1:11</option>
+                <option value="10">1:10</option>
             </select>
         </div>
 
         <div>
             <button class="btn" onclick="calcola()">Calcola</button>
+            <button class="btn" onclick="resetForm()">Reset</button>
         </div>
 
         <div class="result-box" id="risultato"></div>
@@ -128,25 +127,42 @@
             let risultato = "";
             if (litri > 0) {
                 // Calcolo in grammi
-                let grammi = (litri / fattore) * pesoSpecifico;
+                let grammi = (litri * 1000 / fattore) * pesoSpecifico;
                 let ml = grammi / pesoSpecifico;
-                risultato = `Per ${litri} litri di acqua, devi usare ${grammi.toFixed(2)} grammi di Incredibolle (${ml.toFixed(2)} ml).`;
+
+                // Arrotondamento
+                grammi = Math.round(grammi);
+                ml = Math.round(ml);
+
+                risultato = `Per ${litri} litri di acqua, devi usare ${grammi} grammi di Incredibolle (${ml} ml).`;
             } else if (quantitaProdotto > 0) {
                 if (unitaProdotto === "grammi") {
                     // Calcolo litri da grammi
-                    let litriCalcolati = (quantitaProdotto / pesoSpecifico) / fattore;
-                    risultato = `Per ${quantitaProdotto} grammi di Incredibolle, devi usare circa ${litriCalcolati.toFixed(2)} litri di acqua.`;
+                    let litriCalcolati = quantitaProdotto / (1.091 * fattore);
+                    // Arrotondamento
+                    litriCalcolati = Math.round(litriCalcolati);
+                    risultato = `Per ${quantitaProdotto} grammi di Incredibolle, devi usare circa ${litriCalcolati} litri di acqua.`;
                 } else if (unitaProdotto === "ml") {
                     // Calcolo litri da ml
                     let grammiCalcolati = quantitaProdotto * pesoSpecifico;
-                    let litriCalcolati = (grammiCalcolati / pesoSpecifico) / fattore;
-                    risultato = `Per ${quantitaProdotto} ml di Incredibolle, devi usare circa ${litriCalcolati.toFixed(2)} litri di acqua.`;
+                    let litriCalcolati = grammiCalcolati / (1.091 * fattore);
+                    // Arrotondamento
+                    litriCalcolati = Math.round(litriCalcolati);
+                    risultato = `Per ${quantitaProdotto} ml di Incredibolle, devi usare circa ${litriCalcolati} litri di acqua.`;
                 }
             } else {
                 risultato = "Inserisci un valore valido!";
             }
 
             document.getElementById("risultato").innerHTML = risultato;
+        }
+
+        function resetForm() {
+            document.getElementById("litri").value = "";
+            document.getElementById("quantitaProdotto").value = "";
+            document.getElementById("unitaProdotto").value = "grammi";
+            document.getElementById("fattore").value = "16";
+            document.getElementById("risultato").innerHTML = "";
         }
     </script>
 </body>
