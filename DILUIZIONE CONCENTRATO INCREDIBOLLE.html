@@ -1,57 +1,107 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>CALCOLATORE DILUIZIONE INCREDIBOLLE</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1 {
-            color: #333;
-        }
-        label {
-            font-weight: bold;
-        }
-        input, select {
-            margin-bottom: 10px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
-</head>
-<body>
-    <h1>CALCOLATORE DILUIZIONE INCREDIBOLLE</h1>
-    <label for="acqua">Quantità di acqua (litri):</label>
-    <input type="number" id="acqua" name="acqua" step="0.1"><br><br>
-    <label for="fattore">Fattore di diluizione:</label>
-    <select id="fattore" name="fattore">
+<!-- Calcolatore 1: Indica quanta acqua vuoi utilizzare -->
+<div class="container">
+    <h3>Indica quanta acqua vuoi utilizzare</h3>
+    <label>Inserisci i litri di acqua:</label>
+    <input type="number" id="waterLiters" placeholder="Litri di acqua">
+    
+    <label>Seleziona fattore di diluizione:</label>
+    <select id="dilutionFactor1">
+        <option value="10">1:10</option>
+        <option value="11">1:11</option>
+        <option value="12">1:12</option>
+        <option value="13">1:13</option>
+        <option value="14" selected>1:14</option>
         <option value="15">1:15</option>
-        <option value="16" selected>1:16</option>
+        <option value="16">1:16</option>
         <option value="17">1:17</option>
         <option value="18">1:18</option>
-    </select><br><br>
-    <button onclick="calcolaDiluizione()">Calcola</button>
-    <p id="risultato"></p>
+    </select>
+    
+    <button onclick="calculateFromWater()">Calcola</button>
+    <p class="result" id="result1"></p>
+</div>
 
-    <script>
-        function calcolaDiluizione() {
-            var acqua = document.getElementById('acqua').value * 1000; // Converti litri in ml
-            var fattore = document.getElementById('fattore').value;
-            var concentrato = (acqua / fattore).toFixed(1);
-            var concentratoGrammi = Math.round(concentrato * 1.091);
+<!-- Calcolatore 2: Indica quanto prodotto vuoi utilizzare -->
+<div class="container">
+    <h3>Indica quanto prodotto vuoi utilizzare</h3>
+    <label>Seleziona tipo di input:</label>
+    <select id="inputType" onchange="updatePlaceholder()">
+        <option value="grams">Grammi</option>
+        <option value="ml">Millilitri</option>
+    </select>
+    
+    <label>Inserisci valore:</label>
+    <input type="number" id="inputValue" placeholder="Inserisci valore" oninput="convertInput()">
+    <p id="convertedValue"></p>
+    
+    <label>Seleziona fattore di diluizione:</label>
+    <select id="dilutionFactor2">
+        <option value="10">1:10</option>
+        <option value="11">1:11</option>
+        <option value="12">1:12</option>
+        <option value="13">1:13</option>
+        <option value="14" selected>1:14</option>
+        <option value="15">1:15</option>
+        <option value="16">1:16</option>
+        <option value="17">1:17</option>
+        <option value="18">1:18</option>
+    </select>
+    
+    <button onclick="calculateFromProduct()">Calcola</button>
+    <p class="result" id="result2"></p>
+</div>
 
-            var risultato = 'Quantità di concentrato necessaria: ' + concentrato + ' ml (' + concentratoGrammi + ' grammi)';
-            document.getElementById('risultato').innerText = risultato;
+<script>
+    const density = 1.091; // Peso specifico di Incredibolle
+
+    function updatePlaceholder() {
+        const inputType = document.getElementById("inputType").value;
+        document.getElementById("inputValue").placeholder = "Inserisci " + (inputType === "grams" ? "grammi" : "ml");
+        convertInput();
+    }
+
+    function convertInput() {
+        let value = parseFloat(document.getElementById("inputValue").value);
+        if (isNaN(value) || value <= 0) {
+            document.getElementById("convertedValue").innerText = "";
+            return;
         }
-    </script>
-</body>
-</html>
+
+        const inputType = document.getElementById("inputType").value;
+        let convertedValue;
+        if (inputType === "grams") {
+            convertedValue = value / density;
+            document.getElementById("convertedValue").innerText = `Equivalente in ml: ${Math.round(convertedValue)}`;
+        } else {
+            convertedValue = value * density;
+            document.getElementById("convertedValue").innerText = `Equivalente in grammi: ${Math.round(convertedValue)}`;
+        }
+    }
+
+    function calculateFromWater() {
+        let waterLiters = parseFloat(document.getElementById("waterLiters").value);
+        let dilutionFactor = parseInt(document.getElementById("dilutionFactor1").value);
+        if (isNaN(waterLiters) || waterLiters <= 0) {
+            document.getElementById("result1").innerText = "Inserisci un valore valido.";
+            return;
+        }
+        let productNeeded = (waterLiters * 1000) / (dilutionFactor - 1);
+        document.getElementById("result1").innerText = `Utilizzare ${Math.round(productNeeded)} grammi di Incredibolle.`;
+    }
+
+    function calculateFromProduct() {
+        let value = parseFloat(document.getElementById("inputValue").value);
+        if (isNaN(value) || value <= 0) {
+            document.getElementById("result2").innerText = "Inserisci un valore valido.";
+            return;
+        }
+
+        const inputType = document.getElementById("inputType").value;
+        const dilutionFactor = parseInt(document.getElementById("dilutionFactor2").value);
+        let grams = inputType === "grams" ? value : value * density;
+        let waterNeeded = grams * (dilutionFactor - 1);
+        
+        document.getElementById("result2").innerText = `Aggiungere ${Math.round(waterNeeded)} ml di acqua.`;
+    }
+</script>
+
