@@ -5,144 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calcolatore Diluizione Incredibolle</title>
     <style>
-        /* Reset della pagina */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Layout della pagina */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            padding: 20px;
+            margin: 20px;
         }
-
-        /* Titolo */
-        h1 {
-            text-align: center;
-            color: #4CAF50;
-            margin-bottom: 30px;
-        }
-
-        /* Contenitore principale per i calcolatori */
         .container {
             display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            margin-top: 20px;
+            justify-content: space-between;
         }
-
-        /* Contenitore per il calcolatore a sinistra */
-        .calculator-left, .calculator-right {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .section {
             width: 45%;
-            max-width: 400px;
         }
-
-        /* Styling per il titolo all'interno di ciascun calcolatore */
-        .calculator-left h2, .calculator-right h2 {
-            color: #4CAF50;
-            text-align: center;
-            margin-bottom: 15px;
+        .button {
+            margin-top: 10px;
         }
-
-        /* Formattazione del campo input */
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        /* Bottone per inviare il calcolo */
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        /* Centralizzare la scritta "Oppure" */
-        .or {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18px;
+        .result {
             font-weight: bold;
-            margin: 20px 0;
+            margin-top: 10px;
         }
-
     </style>
 </head>
 <body>
-
     <h1>Calcolatore Diluizione Incredibolle</h1>
 
-    <!-- Contenitore per i due calcolatori -->
+    <!-- Sezione 1: Indica quanti litri di acqua vuoi utilizzare -->
     <div class="container">
-        
-        <!-- Calcolatore per l'acqua -->
-        <div class="calculator-left">
-            <h2>Indica quanta acqua vuoi utilizzare</h2>
-            <form id="waterCalculator">
-                <input type="number" id="waterAmount" placeholder="Inserisci litri di acqua">
-                <button type="button" onclick="calculateWater()">Calcola</button>
-            </form>
+        <div class="section">
+            <label for="litriAcqua">Indica quanti litri di acqua vuoi utilizzare:</label>
+            <input type="number" id="litriAcqua" step="0.01" placeholder="Litri" />
+            <label for="fattoreDiluizione">Seleziona il fattore di diluizione:</label>
+            <select id="fattoreDiluizione">
+                <option value="10">1 a 10</option>
+                <option value="18">1 a 18</option>
+            </select>
+            <button class="button" onclick="calcolaAcqua()">Calcola</button>
+            <div id="risultatoAcqua" class="result"></div>
         </div>
 
-        <!-- Testo per separare i due calcolatori -->
-        <div class="or">
-            <span>Oppure</span>
+        <!-- Sezione 2: Indica quanto prodotto vuoi utilizzare -->
+        <div class="section">
+            <label for="quantitaProdotto">Indica quanto prodotto vuoi utilizzare:</label>
+            <input type="number" id="quantitaProdotto" step="0.01" placeholder="Grammi o ml" />
+            <label for="unitaProdotto">Seleziona grammi o ml:</label>
+            <select id="unitaProdotto">
+                <option value="grammi">Grammi</option>
+                <option value="ml">ml</option>
+            </select>
+            <label for="fattoreDiluizione2">Seleziona il fattore di diluizione:</label>
+            <select id="fattoreDiluizione2">
+                <option value="10">1 a 10</option>
+                <option value="18">1 a 18</option>
+            </select>
+            <button class="button" onclick="calcolaProdotto()">Calcola</button>
+            <div id="risultatoProdotto" class="result"></div>
         </div>
-
-        <!-- Calcolatore per il prodotto -->
-        <div class="calculator-right">
-            <h2>Indica quanto prodotto vuoi utilizzare</h2>
-            <form id="productCalculator">
-                <input type="number" id="productAmount" placeholder="Inserisci grammi o ml di prodotto">
-                <button type="button" onclick="calculateProduct()">Calcola</button>
-            </form>
-        </div>
-
     </div>
 
     <script>
-        // Funzione per calcolare la quantità di acqua da aggiungere
-        function calculateWater() {
-            let waterAmount = document.getElementById('waterAmount').value;
-            if (waterAmount) {
-                alert("Devi aggiungere " + (waterAmount * 1.14) + " grammi di Incredibolle");
-            } else {
-                alert("Inserisci una quantità di acqua valida.");
+        const pesoSpecificoIncredibolle = 1.091;
+
+        // Calcola i grammi di prodotto per un dato numero di litri di acqua
+        function calcolaAcqua() {
+            const litri = parseFloat(document.getElementById('litriAcqua').value);
+            const fattore = parseFloat(document.getElementById('fattoreDiluizione').value);
+
+            if (isNaN(litri) || litri <= 0) {
+                alert("Per favore inserisci una quantità valida di litri di acqua.");
+                return;
             }
+
+            const grammi = (litri * fattore).toFixed(2);
+            const ml = (grammi * pesoSpecificoIncredibolle).toFixed(2);
+            document.getElementById('risultatoAcqua').innerText = `Devi utilizzare ${grammi} grammi di Incredibolle (${ml} ml).`;
         }
 
-        // Funzione per calcolare la quantità di prodotto da aggiungere
-        function calculateProduct() {
-            let productAmount = document.getElementById('productAmount').value;
-            if (productAmount) {
-                alert("Devi aggiungere " + (productAmount / 1.14) + " litri di acqua");
+        // Calcola la quantità di acqua per un dato numero di grammi o ml di prodotto
+        function calcolaProdotto() {
+            const quantita = parseFloat(document.getElementById('quantitaProdotto').value);
+            const unita = document.getElementById('unitaProdotto').value;
+            const fattore = parseFloat(document.getElementById('fattoreDiluizione2').value);
+
+            if (isNaN(quantita) || quantita <= 0) {
+                alert("Per favore inserisci una quantità valida di prodotto.");
+                return;
+            }
+
+            let acqua;
+            if (unita === "grammi") {
+                acqua = (quantita / fattore).toFixed(2);
+                const ml = (quantita * pesoSpecificoIncredibolle).toFixed(2);
+                document.getElementById('risultatoProdotto').innerText = `Per ${quantita} grammi di Incredibolle, usa ${acqua} litri di acqua. (${ml} ml)`;
             } else {
-                alert("Inserisci una quantità di prodotto valida.");
+                const grammi = (quantita * (fattore / pesoSpecificoIncredibolle)).toFixed(2);
+                acqua = (quantita / fattore).toFixed(2);
+                document.getElementById('risultatoProdotto').innerText = `Per ${quantita} ml di Incredibolle, usa ${acqua} litri di acqua. (${grammi} grammi)`;
             }
         }
     </script>
-
 </body>
 </html>
