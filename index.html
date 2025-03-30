@@ -128,7 +128,7 @@
             let risultato = "";
             if (litri > 0) {
                 // Calcolo in grammi
-                let grammi = (litri * fattore) * pesoSpecifico;
+                let grammi = (litri / fattore) * pesoSpecifico;
                 let ml = grammi / pesoSpecifico;
                 risultato = `Per ${litri} litri di acqua, devi usare ${grammi.toFixed(2)} grammi di Incredibolle (${ml.toFixed(2)} ml).`;
             } else if (quantitaProdotto > 0) {
