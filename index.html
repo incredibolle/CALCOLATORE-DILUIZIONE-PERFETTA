@@ -84,7 +84,7 @@
     </style>
 </head>
 <body>
-    <h1>Calcolatore di Diluizione Incredibolle</h1>
+    <h1>Calcolatore Diluizione Incredibolle</h1>
     <div class="container">
         <div class="section">
             <h3>Indica quanti litri di acqua vuoi utilizzare:</h3>
@@ -160,13 +160,23 @@
                     let litriCalcolati = (mlCalcolati * fattore) / 1000;
                     // Arrotondamento
                     litriCalcolati = Math.round(litriCalcolati * 10) / 10;
-                    risultato = `Per ${quantitaProdotto} grammi di Incredibolle, devi usare circa ${litriCalcolati} litri di acqua.`;
+
+                    // Calcolo esatto da visualizzare
+                    let esattoLitri = (quantitaProdotto / 1.091 * fattore) / 1000;
+                    esattoLitri = Math.round(esattoLitri * 1000) / 1000;
+
+                    risultato = `Per ${quantitaProdotto} grammi di Incredibolle, devi usare circa ${litriCalcolati} litri di acqua, tra parentesi ${esattoLitri} litri.`;
                 } else if (unitaProdotto === "ml") {
                     // Calcolo litri da ml
                     let litriCalcolati = (quantitaProdotto / 1000) * fattore;
                     // Arrotondamento
                     litriCalcolati = Math.round(litriCalcolati * 10) / 10;
-                    risultato = `Per ${quantitaProdotto} ml di Incredibolle, devi usare circa ${litriCalcolati} litri di acqua.`;
+
+                    // Calcolo esatto da visualizzare
+                    let esattoLitri = (quantitaProdotto / 1000 * fattore);
+                    esattoLitri = Math.round(esattoLitri * 1000) / 1000;
+
+                    risultato = `Per ${quantitaProdotto} ml di Incredibolle, devi usare circa ${litriCalcolati} litri di acqua, tra parentesi ${esattoLitri} litri.`;
                 }
             } else {
                 risultato = "Inserisci un valore valido!";
