@@ -27,7 +27,8 @@
             margin-bottom: 20px;
         }
         .input-box {
-            width: 200px;
+            width: 100%;
+            max-width: 300px;
             padding: 10px;
             margin: 10px;
             border-radius: 5px;
@@ -56,43 +57,36 @@
             margin-top: 20px;
             font-weight: bold;
         }
-        .container-flex {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
+        .center {
+            font-size: 24px;
+            color: #4CAF50;
+            font-weight: bold;
         }
         select {
             padding: 10px;
             font-size: 16px;
             border-radius: 5px;
             border: 1px solid #ccc;
-        }
-        .center {
-            font-size: 24px;
-            color: #4CAF50;
-            font-weight: bold;
+            width: 100%;
+            max-width: 300px;
         }
     </style>
 </head>
 <body>
     <h1>Calcolatore di Diluizione Incredibolle</h1>
     <div class="container">
-        <div class="container-flex">
-            <div class="section">
-                <h3>Indica quanti litri di acqua vuoi utilizzare:</h3>
-                <input id="litri" class="input-box" type="number" step="0.01" placeholder="Litri" required>
-            </div>
+        <div class="section">
+            <h3>Indica quanti litri di acqua vuoi utilizzare:</h3>
+            <input id="litri" class="input-box" type="number" step="0.01" placeholder="Litri" required>
+        </div>
 
-            <div class="center">oppure</div>
-
-            <div class="section">
-                <h3>Indica quanto prodotto vuoi utilizzare (grammi o ml):</h3>
-                <input id="quantitaProdotto" class="input-box" type="number" step="0.01" placeholder="Grammi o ml" required>
-                <select id="unitaProdotto" class="input-box">
-                    <option value="grammi">Grammi</option>
-                    <option value="ml">Millilitri</option>
-                </select>
-            </div>
+        <div class="section">
+            <h3>Indica quanto prodotto vuoi utilizzare (grammi o ml):</h3>
+            <input id="quantitaProdotto" class="input-box" type="number" step="0.01" placeholder="Grammi o ml" required>
+            <select id="unitaProdotto" class="input-box">
+                <option value="grammi">Grammi</option>
+                <option value="ml">Millilitri</option>
+            </select>
         </div>
 
         <div class="section">
